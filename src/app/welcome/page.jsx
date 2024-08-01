@@ -1,8 +1,9 @@
-"use client";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
-import Navbar from "../components/Navebar";
+"use client"
+import { Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import Navbar from '../components/Navebar';
 
 export default function Process() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function Process() {
     }
 
     setCode(code);
-    setIsFetching(false);
+    setIsFetching(true);
 
     fetch("/api/callback", {
       method: "POST",
