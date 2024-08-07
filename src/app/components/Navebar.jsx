@@ -12,7 +12,7 @@ function Navbar() {
         <div>
           <a href="/">
             <Image
-              src="/mfu-logo.png"
+              src="/logo-mfu.png"
               width={60}
               height={60}
               alt="MFU-LOGO"
