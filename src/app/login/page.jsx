@@ -3,6 +3,7 @@ import React from "react";
 import Navbar from "../components/Navebar";
 import Image from "next/image";
 import { thaid_setdata } from "../../../lib/thaid";
+import DownloadButtons from "../components/DowloadButton";
 
 function LoginPage() {
   const { scopeText, state } = thaid_setdata();
@@ -24,8 +25,11 @@ function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-200">
       <Navbar />
-      <div className="flex-grow flex-col items-start justify-center bg-white rounded m-4">
-        <div className="h-[0.1rem] w-full bg-gray-200 justify-center mt-12"></div>
+      <div className="xl:flex-grow flex-col items-start justify-center bg-white rounded m-4">
+        <h1 className="text-black font-bold text-sm md:text-xl lg:text-2xl m-4 mt-6">
+          ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID
+        </h1>
+        <div className="h-[0.1rem] w-full bg-gray-200 justify-center mt-4" />
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center my-2">
           <div className="mt-2 container px-2">
             <Image
@@ -39,35 +43,41 @@ function LoginPage() {
             />
           </div>
 
-          <div className="flex items-start justify-center xl:justify-start container mt-2 px-2">
-            <a
-              className="block text-center cursor-pointer px-3 py-2 xl:ml-4 md:p-6 rounded-lg shadow-md bg-blue-500 hover:bg-blue-600 transition duration-200 w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-xl"
-              onClick={handleLogin}
-            >
-              <div>
-                <div className="flex items-center justify-center mt-4">
-                  <div className="bg-white rounded-lg mb-3 p-1 ">
+          <div className="flex flex-col items-start justify-center xl:justify-start container mt-2 px-2">
+            <div className="flex flex-row items-start justify-center xl:justify-start container mt-2 px-2">
+              <a
+                id="btn-login"
+                className="block text-center cursor-pointer px-3 py-2 xl:ml-4 md:p-6 rounded-full shadow-md border-4 w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-xl"
+                onClick={handleLogin}
+              >
+                <div className="flex items-center justify-center">
+                  <div id="logo-thaid" className="bg-white rounded-full p-1 w-24 h-24 flex items-center justify-center">
                     <Image
-                      className="lg:max-w-20"
-                      src="/ThaID1.png"
+                      className="w-full h-full object-cover rounded-full"
+                      src="/thaiD_logo.png"
                       width={100}
                       height={100}
                       alt="Thaid-LOGO"
                       priority
                     />
                   </div>
-                  <div className="text-center p-1 mb-3">
-                    <h1 className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-xl">
-                      LOGIN BY THAID
-                    </h1>
-                  </div>
                 </div>
-                <div className="h-[0.1rem] w-full bg-white justify-center"></div>
-              </div>
-              <h2 className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-xl my-3">
-                เข้าสู่ระบบคลิกที่นี่
-              </h2>
-            </a>
+                <div id="line" className="h-[0.1rem] w-full bg-white justify-center mt-4 rounded-xl"></div>
+                <div id="" className="h-[0.15rem] w-full bg-white justify-center rounded-xl "></div>
+                <div id="line" className="h-[0.1rem] w-full bg-white justify-center mb-4 rounded-xl"></div>
+                <h1 className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-xl">
+                  LOGIN BY THAID
+                </h1>
+              </a>
+            </div>
+
+            <div className="w-full p-6">
+              <div className="h-[0.1rem] w-full bg-gray-200 justify-center my-4" />
+              <h1 className=" font-bold text-lg sm:text-xl md:text-2xl lg:text-xl">
+                สามารถดาวน์โหลดแอปพลิเคชั่น ThaID ได้ที่
+              </h1>
+              <DownloadButtons />
+            </div>
           </div>
         </div>
       </div>

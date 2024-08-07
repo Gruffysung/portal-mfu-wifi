@@ -1,32 +1,39 @@
-
-import Navbar from "./components/Navebar";
-import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <div className="flex-grow flex items-center justify-center">
-        <div className="w-full max-w-md mx-auto p-4">
-          <h1 className="text-center text-4xl mb-8 md:text-2xl lg:text-4xl">
-            MFU WIFI 
-          </h1>
-          <div className="h-auto w-full">
-            {/* ข้อมูลและรายละเอียดต่างๆที่ผู้ใช้ควรรู้ึ */}
-            <p className="text-center text-xl">
-              ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ต
+    <div
+      id="bg-home"
+      className="min-h-screen flex flex-col bg-cover bg-center relative"
+    >
+      <div className="relative py-4 lg:py-0 flex flex-col justify-center my-8 md:my-16 mx-4 md:mx-16 lg:mx-36 xl:mx-56 rounded-lg bg-white bg-opacity-90">
+        <div className="relative w-full flex justify-center">
+          <div className="relative w-1/4 mt-8  max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
+            <Image
+              className="object-cover"
+              src="/logo-mfu.png"
+              layout="responsive"
+              width={100}
+              height={100}
+              alt="Mae Fah Luang University"
+              priority
+            />
+          </div>
+        </div>
+        <div className="container w-full flex justify-center">
+          <div className="relative text-center p-4 md:p-6 lg:p-8">
+            <h1 className="font-bold text-lg md:text-xl lg:text-2xl">
+              Mae Fah Luang University
+            </h1>
+            <div className="h-[1.5px] w-full bg-black my-4 mx-auto" />
+            <p className="text-sm md:text-base lg:text-xl">
+              ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID
             </p>
-            <p>
-              
-            </p>
-            <div className="container w-10 flex items-center mx-auto justify-center">
-              <Link
-                className="text-center text-2xl font-bold  text-blue-400 hover:underline pt-2 mt-2 "
-                href={"/login"}
-              >
-                Login
-              </Link>
-            </div>
+            <a href="/login">
+              <div className="p-3 mt-4 mx-4 mb-10 md:mx-6 lg:mx-8 bg-black text-white text-center rounded-lg">
+                <p className="text-sm md:text-base lg:text-xl">เข้าสู่ระบบ</p>
+              </div>
+            </a>
           </div>
         </div>
       </div>

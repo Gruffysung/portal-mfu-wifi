@@ -62,7 +62,7 @@ export default function WelcomeContent() {
               <strong>Connection completed</strong>
             </p>
             <p>
-              <strong>Expires in:</strong> {expiresIn}
+              <strong>ระบบจะตัดการเชื่อต่อจาก WIFI หลังจาก 24 ชั่วโมง</strong>
             </p>
           </div>
         ) : (
