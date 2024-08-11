@@ -7,23 +7,27 @@ export default function WelcomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [code, setCode] = useState(null);
+  const [mac, setMac] = useState(null);
   const [tokenData, setTokenData] = useState(null);
   const [error, setError] = useState(null);
-  const [expiresIn, setExpiresIn] = useState(null);
-  const isFetching = useRef(false); // ใช้ useRef เพื่อจัดการสถานะการเรียก API
+  const [clearPassResult, setClearPassResult] = useState(null);
+  const isFetching = useRef(false);
 
   useEffect(() => {
-    if (isFetching.current) return; // ป้องกันการเรียก API หลายครั้ง
+    const macAddress = localStorage.getItem("mac");
+    setMac(macAddress);
+
+    if (isFetching.current) return;
 
     const code = searchParams.get("code");
-    window.history.replaceState(null, "", "/process");
+    window.history.replaceState(null, "", "/welcome");
 
     if (!code) {
       router.push("/login");
       return;
     }
-
     setCode(code);
+
     isFetching.current = true;
 
     fetch("/api/callback", {
@@ -37,18 +41,33 @@ export default function WelcomeContent() {
       .then((data) => {
         if (data.error) {
           setError(data.error);
+          throw new Error(data.error);
         } else {
           setTokenData(data);
-          const expirationDate = new Date(
-            data.expires_in * 1000
-          ).toLocaleString();
-          setExpiresIn(expirationDate);
+          return fetch("/api/endpoint_clearpass", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ mac: macAddress }),
+          });
         }
-        isFetching.current = false;
+      })
+      .then((response) => response.json())
+      .then((clearPassData) => {
+        if (clearPassData.error) {
+          setError(clearPassData.error);
+          throw new Error(clearPassData.error);
+        } else {
+          setClearPassResult(clearPassData);
+        }
       })
       .catch((error) => {
         console.error("Fetch Error:", error);
-        setError("Failed to fetch token");
+        setError("Failed to fetch token or clear pass authentication");
+        router.push("/login");
+      })
+      .finally(() => {
         isFetching.current = false;
       });
   }, [searchParams, router]);
@@ -56,12 +75,12 @@ export default function WelcomeContent() {
   return (
     <div className="h-auto w-full text-center">
       <div>
-        {tokenData ? (
+        {clearPassResult && clearPassResult.status === "pending" ? (
           <div>
-            <p>
+            <p className="text-lg font-bold">
               <strong>Connection completed</strong>
             </p>
-            <p>
+            <p className="mt-4">
               <strong>ระบบจะตัดการเชื่อต่อจาก WIFI หลังจาก 24 ชั่วโมง</strong>
             </p>
           </div>

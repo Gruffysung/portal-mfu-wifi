@@ -4,21 +4,30 @@ import Navbar from "../components/Navebar";
 import Image from "next/image";
 import { thaid_setdata } from "../../../lib/thaid";
 import DownloadButtons from "../components/DowloadButton";
+import { useEffect, useState, useRef } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 function LoginPage() {
   const { scopeText, state } = thaid_setdata();
+  const [mac, setMac] = useState(null);
+  // const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const macAddress = localStorage.getItem("mac");
+    setMac(macAddress);
+
+    
+  }, []);
 
   async function handleLogin() {
-    const response = await fetch(
-      `/api/login?scope=${scopeText}&state=${state}`
-    );
+    const response = await fetch(`/api/login?scope=${scopeText}&state=${mac}`);
     const data = await response.json();
 
     if (response.ok) {
       window.location.href = data.authUrl; // เปลี่ยนเส้นทางไปยัง URL ที่ได้รับ
     } else {
       console.error("เกิดข้อผิดพลาดในการเปลี่ยนเส้นทาง");
-      // console.log(data.authUrl);
+
     }
   }
 
@@ -51,7 +60,10 @@ function LoginPage() {
                 onClick={handleLogin}
               >
                 <div className="flex items-center justify-center">
-                  <div id="logo-thaid" className="bg-white rounded-full p-1 w-24 h-24 flex items-center justify-center">
+                  <div
+                    id="logo-thaid"
+                    className="bg-white rounded-full p-1 w-24 h-24 flex items-center justify-center"
+                  >
                     <Image
                       className="w-full h-full object-cover rounded-full"
                       src="/thaiD_logo.png"
@@ -62,9 +74,18 @@ function LoginPage() {
                     />
                   </div>
                 </div>
-                <div id="line" className="h-[0.1rem] w-full bg-white justify-center mt-4 rounded-xl"></div>
-                <div id="" className="h-[0.15rem] w-full bg-white justify-center rounded-xl "></div>
-                <div id="line" className="h-[0.1rem] w-full bg-white justify-center mb-4 rounded-xl"></div>
+                <div
+                  id="line"
+                  className="h-[0.1rem] w-full bg-white justify-center mt-4 rounded-xl"
+                ></div>
+                <div
+                  id=""
+                  className="h-[0.15rem] w-full bg-white justify-center rounded-xl "
+                ></div>
+                <div
+                  id="line"
+                  className="h-[0.1rem] w-full bg-white justify-center mb-4 rounded-xl"
+                ></div>
                 <h1 className="text-white font-bold text-lg sm:text-xl md:text-2xl lg:text-xl">
                   LOGIN BY THAID
                 </h1>

@@ -2,6 +2,7 @@ import { thaid_setdata } from '../../../../lib/thaid'; // ปรับเส้�
 import axios from 'axios';
 
 export async function GET(request) {
+  const url = new URL(request.url);
 
   const { urlAuth, clientID, redirect_uri, scopeText, state } = thaid_setdata();
 
@@ -14,9 +15,8 @@ export async function GET(request) {
   try {
     const response = await axios.get(authUrl, { headers });
     const data = response.data;
-    return new Response(JSON.stringify({authUrl}), { status: 200 });
+    return new Response(JSON.stringify({ authUrl }), { status: 200 });
   } catch (error) {
     return new Response(JSON.stringify({ error: 'ไม่สามารถดึงข้อมูลจาก URL การยืนยันตัวตนได้' }), { status: 500 });
   }
-
 }

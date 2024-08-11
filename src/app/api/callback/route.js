@@ -30,6 +30,7 @@ export async function POST(req, res) {
 
         const response = await axios.post(urlToken, new URLSearchParams(data).toString(), { headers });
         const tokenData = response.data;
+        
 
         // connect MongoDb
         await connectMongoDB();
@@ -47,16 +48,6 @@ export async function POST(req, res) {
                 LastName: tokenData.family_name,
             });
         }
-        // Timestamp ที่ให้มา
-        const exp = tokenData.expires_in;
-
-        // แปลงเป็น milliseconds (timestamp ปกติจะเป็น seconds ดังนั้นคูณด้วย 1000)
-        const date = new Date(exp * 1000);
-
-        // แสดงผลลัพธ์
-        // console.log(date.toString()); // แสดงวันที่และเวลาในรูปแบบที่อ่านได้
-
-
         // console.log(tokenData);
         return new Response(JSON.stringify(response.data), { status: response.status });
     } catch (error) {
