@@ -43,7 +43,7 @@ export default function Main() {
             </h1>
             <div className="h-[1.5px] w-full bg-black my-4 mx-auto" />
             <p className="text-sm md:text-base lg:text-xl">
-              ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID.
+              ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID
             </p>
             <a href="/login">
               <div className="p-3 mt-4 mx-4 mb-10 md:mx-6 lg:mx-8 bg-black text-white text-center rounded-lg">
