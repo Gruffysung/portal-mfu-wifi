@@ -1,21 +1,18 @@
 "use client";
+import React, { Suspense } from "react";
 import Image from "next/image";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-export default function Main() {
+function Content() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   useEffect(() => {
     const macAddress = searchParams.get("mac");
-    const mac = macAddress
-    localStorage.setItem('mac',mac)
+    const mac = macAddress;
+    localStorage.setItem('mac', mac);
     console.log(mac);
-    
-
-  }, [searchParams, router]);
-
+  }, [searchParams]);
 
   return (
     <div
@@ -24,7 +21,7 @@ export default function Main() {
     >
       <div className="relative py-4 lg:py-0 flex flex-col justify-center my-8 md:my-16 mx-4 md:mx-16 lg:mx-36 xl:mx-56 rounded-lg shadow-xl bg-white bg-opacity-90">
         <div className="relative w-full flex justify-center">
-          <div className="relative w-1/4 mt-8  max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
+          <div className="relative w-1/4 mt-8 max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
             <Image
               className="object-cover"
               src="/logo-mfu.png"
@@ -54,5 +51,13 @@ export default function Main() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense>
+      <Content />
+    </Suspense>
   );
 }

@@ -5,22 +5,19 @@ import Image from "next/image";
 import { thaid_setdata } from "../../../lib/thaid";
 import DownloadButtons from "../components/DowloadButton";
 import { useEffect, useState, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+
 
 function LoginPage() {
   const { scopeText, state } = thaid_setdata();
   const [mac, setMac] = useState(null);
-  // const searchParams = useSearchParams();
 
   useEffect(() => {
     const macAddress = localStorage.getItem("mac");
     setMac(macAddress);
-
-    
   }, []);
 
   async function handleLogin() {
-    const response = await fetch(`/api/login?scope=${scopeText}&state=${mac}`);
+    const response = await fetch(`/api/login?scope=${scopeText}&state=${state}`);
     const data = await response.json();
 
     if (response.ok) {
