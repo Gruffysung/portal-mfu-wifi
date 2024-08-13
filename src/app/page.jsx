@@ -6,28 +6,41 @@ import { useSearchParams } from "next/navigation";
 function Content() {
   const searchParams = useSearchParams();
   const [showPopup, setShowPopup] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
 
   useEffect(() => {
     const macAddress = searchParams.get("mac");
-    const mac = macAddress;
-    localStorage.setItem("mac", mac);
-    console.log(mac);
+    localStorage.setItem("mac", macAddress);
+    console.log(`mac = ${macAddress}`);
 
-    // Delay showing the popup for a better user experience
+    const fullUrl = window.location.href;
+    setCurrentUrl(fullUrl);
+    console.log(`url = ${fullUrl}`);
+
     setTimeout(() => {
       setShowPopup(true);
-    }, 1000); // 1 second delay
+    }, 1000);
   }, [searchParams]);
+
+  const openInBrowser = () => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    if (isIOS) {
+      window.location.href = currentUrl;
+    } else if (isAndroid) {
+      window.location.href = `intent://${currentUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
+    } else {
+      window.open(currentUrl, "_blank");
+    }
+  };
 
   const closePopup = () => {
     setShowPopup(false);
   };
 
   return (
-    <div
-      id="bg-home"
-      className="min-h-screen flex flex-col bg-cover bg-center relative"
-    >
+    <div id="bg-home" className="min-h-screen flex flex-col bg-cover bg-center relative">
       <div className="relative py-4 lg:py-0 flex flex-col justify-center my-8 md:my-16 mx-4 md:mx-16 lg:mx-36 xl:mx-56 rounded-lg shadow-xl bg-white bg-opacity-90">
         <div className="relative w-full flex justify-center">
           <div className="relative w-1/4 mt-8 max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg">
@@ -60,7 +73,6 @@ function Content() {
         </div>
       </div>
 
-      {/* Pop-up component */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
@@ -74,10 +86,8 @@ function Content() {
               <li>สำหรับ Android: คลิกปุ่มด้านล่างเพื่อเปิดใน Chrome.</li>
             </ul>
             <a
-              href="https://mfuthd.mfu.ac.th/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 bg-black text-white rounded-lg"
+              onClick={openInBrowser}
+              className="p-3 bg-black text-white rounded-lg cursor-pointer"
             >
               เปิดในเบราว์เซอร์หลัก
             </a>
