@@ -1,18 +1,27 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 
 function Content() {
   const searchParams = useSearchParams();
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const macAddress = searchParams.get("mac");
     const mac = macAddress;
-    localStorage.setItem('mac', mac);
+    localStorage.setItem("mac", mac);
     console.log(mac);
+
+    // Delay showing the popup for a better user experience
+    setTimeout(() => {
+      setShowPopup(true);
+    }, 1000); // 1 second delay
   }, [searchParams]);
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   return (
     <div
@@ -50,6 +59,37 @@ function Content() {
           </div>
         </div>
       </div>
+
+      {/* Pop-up component */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
+            <h2 className="text-lg font-bold mb-4">การใช้งานเต็มรูปแบบ</h2>
+            <p className="mb-4">
+              เพื่อให้สามารถใช้งานเว็บไซต์ได้อย่างสมบูรณ์
+              เราแนะนำให้คุณเปิดลิงก์นี้ในเบราว์เซอร์หลักของคุณ:
+            </p>
+            <ul className="text-left list-disc list-inside mb-4">
+              <li>สำหรับ iOS: คลิกปุ่มด้านล่างเพื่อเปิดใน Safari.</li>
+              <li>สำหรับ Android: คลิกปุ่มด้านล่างเพื่อเปิดใน Chrome.</li>
+            </ul>
+            <a
+              href="https://mfuthd.mfu.ac.th/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 bg-black text-white rounded-lg"
+            >
+              เปิดในเบราว์เซอร์หลัก
+            </a>
+            <button
+              onClick={closePopup}
+              className="mt-4 p-2 text-sm text-gray-600 underline"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
