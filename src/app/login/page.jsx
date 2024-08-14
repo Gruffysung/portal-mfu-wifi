@@ -55,6 +55,7 @@ function LoginPage() {
                 id="btn-login"
                 className="block text-center cursor-pointer px-3 py-2 xl:ml-4 md:p-6 rounded-full shadow-md border-4 w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-xl"
                 onClick={handleLogin}
+                
               >
                 <div className="flex items-center justify-center">
                   <div

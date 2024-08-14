@@ -46,6 +46,7 @@ export async function POST(req, res) {
                 CitizenID: hashedCitizenID,  // Used hash CitizenID
                 FirstName: tokenData.given_name,
                 LastName: tokenData.family_name,
+                role : "Guest-user"
             });
         }
         // console.log(tokenData);

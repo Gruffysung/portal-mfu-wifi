@@ -2,6 +2,7 @@
 import React, { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { userAgent } from "next/server";
 
 function Content() {
   const searchParams = useSearchParams();
@@ -10,31 +11,41 @@ function Content() {
 
   useEffect(() => {
     const macAddress = searchParams.get("mac");
-    localStorage.setItem("mac", macAddress);
-    console.log(`mac = ${macAddress}`);
-
-    const fullUrl = window.location.href;
-    setCurrentUrl(fullUrl);
-    console.log(`url = ${fullUrl}`);
+    const decodedMac = decodeURIComponent(macAddress);
+    const macCiscoFormat = decodedMac.replace(/:/g, "");
+    console.log(`mac = ${macCiscoFormat}`);
+    localStorage.setItem("mac", macCiscoFormat);
 
     setTimeout(() => {
-      setShowPopup(true);
+      setShowPopup(false);
     }, 1000);
   }, [searchParams]);
 
-  const openInBrowser = () => {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isAndroid = /Android/.test(navigator.userAgent);
-
-    if (isIOS) {
-      window.location.href = currentUrl;
-    } else if (isAndroid) {
-      window.location.href = `intent://${currentUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
-    } else {
-      window.open(currentUrl, "_blank");
-    }
-  };
-
+  // const openInBrowser = () => {
+  //   const userAgent = navigator.userAgent || navigator.platform;
+  //   const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+  //   const isAndroid = /Android/.test(userAgent);
+  
+  //   // Log to terminal
+  //   console.log(`User Agent: ${userAgent}`);
+  //   console.log(`Is iOS: ${isIOS}`);
+  //   console.log(`Is Android: ${isAndroid}`);
+  
+  //   if (isIOS) {
+  //     // ใช้ Custom URL Scheme สำหรับ iOS
+  //     console.log(`Opening in Safari or custom app for iOS: ${currentUrl}`);
+  //     window.location.href = `safari://navigate?url=${encodeURIComponent(currentUrl)}`;
+  //   } else if (isAndroid) {
+  //     // เปิดใน Chrome สำหรับ Android
+  //     console.log(`Opening in Chrome for Android: ${currentUrl}`);
+  //     window.location.href = `intent://${currentUrl.replace('https://', '')}#Intent;scheme=https;package=com.android.chrome;end`;
+  //   } else {
+  //     // เปิดในเบราว์เซอร์เริ่มต้น
+  //     console.log(`Opening in default browser: ${currentUrl}`);
+  //     window.open(currentUrl, "_blank");
+  //   }
+  // };
+  
   const closePopup = () => {
     setShowPopup(false);
   };
@@ -86,7 +97,7 @@ function Content() {
               <li>สำหรับ Android: คลิกปุ่มด้านล่างเพื่อเปิดใน Chrome.</li>
             </ul>
             <a
-              onClick={openInBrowser}
+              onClick={currentUrl}
               className="p-3 bg-black text-white rounded-lg cursor-pointer"
             >
               เปิดในเบราว์เซอร์หลัก

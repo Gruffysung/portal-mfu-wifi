@@ -9,8 +9,7 @@ export async function POST(req) {
         client_id: process.env.NEXT_PUBLIC_CLEARPASS_CLIENT_ID
     };
 
-    // const { mac } = await req.json();
-    const mac = '1a-2a-3a-4a-5a-6a'
+    const { mac } = await req.json();
     try {
         const response = await fetch(url, {
             method: "POST",
