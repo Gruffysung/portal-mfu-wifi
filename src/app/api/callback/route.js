@@ -41,7 +41,7 @@ export async function POST(req, res) {
         // Find data
         let user = await User.findOne({ CitizenID: hashedCitizenID });
         if (!user) {
-            // ถ้าไม่มีข้อมูลให้เพิ่มข้อมูลใหม่
+            // if db has no this data, create new data. if data already exits, there is no need to create new data
             await User.create({
                 CitizenID: hashedCitizenID,  // Used hash CitizenID
                 FirstName: tokenData.given_name,
@@ -49,7 +49,6 @@ export async function POST(req, res) {
                 role : "Guest-user"
             });
         }
-        // console.log(tokenData);
         return new Response(JSON.stringify(response.data), { status: response.status });
     } catch (error) {
         console.error('Error:', error);

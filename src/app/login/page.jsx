@@ -6,31 +6,35 @@ import { thaid_setdata } from "../../../lib/thaid";
 import DownloadButtons from "../components/DowloadButton";
 import { useEffect, useState, useRef } from "react";
 
-
 function LoginPage() {
   const { scopeText, state } = thaid_setdata();
   const [mac, setMac] = useState(null);
 
   useEffect(() => {
+    // ====================== start get macAddress from localStorage. =====================
     const macAddress = localStorage.getItem("mac");
     setMac(macAddress);
+    // ====================== end  get macAddress from localStorage. =====================
   }, []);
 
+  // ====================== start Declare function login =====================
   async function handleLogin() {
-    const response = await fetch(`/api/login?scope=${scopeText}&state=${state}`);
+    const response = await fetch(
+      `/api/login?scope=${scopeText}&state=${state}`
+    );
     const data = await response.json();
 
     if (response.ok) {
-      window.location.href = data.authUrl; // เปลี่ยนเส้นทางไปยัง URL ที่ได้รับ
+      window.open(data.authUrl, "_system"); // open authUtl from respone from api/login
     } else {
       console.error("เกิดข้อผิดพลาดในการเปลี่ยนเส้นทาง");
-
     }
   }
+  // ====================== end Declare function login =====================
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-200">
-      <Navbar />
+      <Navbar /> {/* use navbar from componentes */}
       <div className="xl:flex-grow flex-col items-start justify-center bg-white rounded m-4">
         <h1 className="text-black font-bold text-sm md:text-xl lg:text-2xl m-4 mt-6">
           ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID
@@ -55,7 +59,6 @@ function LoginPage() {
                 id="btn-login"
                 className="block text-center cursor-pointer px-3 py-2 xl:ml-4 md:p-6 rounded-full shadow-md border-4 w-full max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-xl"
                 onClick={handleLogin}
-                
               >
                 <div className="flex items-center justify-center">
                   <div
@@ -95,7 +98,7 @@ function LoginPage() {
               <h1 className=" font-bold text-lg sm:text-xl md:text-2xl lg:text-xl">
                 สามารถดาวน์โหลดแอปพลิเคชั่น ThaID ได้ที่
               </h1>
-              <DownloadButtons />
+              <DownloadButtons /> {/* use DowloadButtons from componentes */}
             </div>
           </div>
         </div>

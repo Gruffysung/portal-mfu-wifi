@@ -14,7 +14,7 @@ export default function Welcome() {
             Mae Fah Luang University
           </h1>
           <Suspense>
-            <WelcomeContent />
+            <WelcomeContent /> {/* use WelcomeContent from componentes */}
           </Suspense>
         </div>
       </div>

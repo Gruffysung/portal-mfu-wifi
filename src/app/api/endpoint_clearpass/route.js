@@ -9,7 +9,7 @@ export async function POST(req) {
         client_id: process.env.NEXT_PUBLIC_CLEARPASS_CLIENT_ID
     };
 
-    const { mac } = await req.json();
+    const { mac } = await req.json(); // use value sent from welcome page.
     try {
         const response = await fetch(url, {
             method: "POST",
@@ -26,11 +26,26 @@ export async function POST(req) {
         // ================================================================================================================
         // Start Enpoint/mac-address
         const patchUrl = `https://clearpass.mfu.ac.th:443/api/endpoint/mac-address/${mac}`;
+        // ================== start get nowDate and convert to the desired format. 
+        const currentDate = new Date();
+        currentDate.setHours(currentDate.getHours() + 24);
+
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0"); // add 1 because JavaScript start at 0.
+            const day = String(date.getDate()).padStart(2, "0");
+            const hours = String(date.getHours()).padStart(2, "0");
+            const minutes = String(date.getMinutes()).padStart(2, "0");
+            const seconds = String(date.getSeconds()).padStart(2, "0");
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        };
+        // ==================================================================================================================
         const patchData = {
             "mac_address": mac,
             "description": "update by nut with node.js",
             "status": "Known",
-            "attributes": { "Allow-Guest-Internet": "true" }
+            "attributes": { "Allow-Guest-Internet": "true", "MAC-Auth Expiry": `${formatDate(currentDate)}` }
         };
 
         const patchResponse = await fetch(patchUrl, {
