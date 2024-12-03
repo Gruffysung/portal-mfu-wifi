@@ -25,7 +25,7 @@ function LoginPage() {
     const data = await response.json();
 
     if (response.ok) {
-      window.open(data.authUrl, "_system"); // open authUtl from respone from api/login
+      window.location.href = data.authUrl ; // open authUtl from respone from api/login
     } else {
       console.error("เกิดข้อผิดพลาดในการเปลี่ยนเส้นทาง");
     }

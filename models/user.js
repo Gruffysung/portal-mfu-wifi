@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     CitizenID: { type: String, required: true, unique: true },
     FirstName: { type: String, required: true },
     LastName: { type: String, required: true },
-    role: {type: String}
+    
 
 }, { timestamps: true });
 

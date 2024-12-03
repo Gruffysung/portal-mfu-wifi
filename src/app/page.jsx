@@ -2,13 +2,13 @@
 import React, { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 
 function Content() {
   const searchParams = useSearchParams();
   const [showPopup, setShowPopup] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
   const [deviceType, setDeviceType] = useState("");
+  const [macAddress, setmacAddress] = useState("");
   const [os, setOs] = useState("Unknown OS");
 
   useEffect(() => {
@@ -17,6 +17,7 @@ function Content() {
     const decodedMac = decodeURIComponent(macAddress); // decodedMac
     const macCiscoFormat = decodedMac.replace(/:/g, ""); // set form macAddress
     localStorage.setItem("mac", macCiscoFormat); // store macAddress cicso form
+    setmacAddress(macCiscoFormat);
     //======================= End get macAddress and decoddeMac ====================================
 
     //======================= Start get fullUrl ====================================
@@ -26,14 +27,32 @@ function Content() {
 
     //======================= Start detect type of browser and Os ====================================
     const userAgent =
-      typeof window !== "undefined" ? navigator.userAgent.toLowerCase() : ""; //use navigator.userAgent to detect device type.
-    const isWebView = /(FBAN|FBAV|Instagram|WebView|wv)/i.test(userAgent);
+      typeof window !== "undefined" ? navigator.userAgent.toLowerCase() : "";
+
+    // ตรวจสอบว่าเป็น WebView หรือไม่
+    const isWebView = () => {
+      // ตรวจสอบ userAgent สำหรับ WebView บนอุปกรณ์ iOS
+      const iosWebView = /(fb|fbav|instagram|webview|wv)/i.test(userAgent);
+
+      // ตรวจสอบว่า `navigator.standalone` เป็น true หรือ false
+      // บาง WebView จะมี navigator.standalone เป็น true
+      const iosStandalone = window.navigator.standalone === true;
+
+      return iosWebView || iosStandalone;
+    };
     const isSystemBrowser = !isWebView;
+
+    // ตรวจสอบระบบปฏิบัติการ
     const android = userAgent.includes("android");
     const iphone =
       !android && (userAgent.includes("iphone") || userAgent.includes("ipod"));
     const ipad = !android && !iphone && userAgent.includes("ipad");
+    const macOs =
+      !android && !iphone && !ipad && userAgent.includes("macintosh");
+
+    // รวมการตรวจสอบ iOS
     const ios = iphone || ipad;
+
     const mobile = android || ios;
 
     //================= start check and set os type =================
@@ -43,17 +62,15 @@ function Content() {
       setOs("iOS");
     } else if (android) {
       setOs("Android");
+    } else if (macOs) {
+      setOs("macOs");
     }
     //================= end check and set os type =================
 
     //================= start check device type and setShowPopup ===================
     if (mobile) {
       setDeviceType("mobile");
-      if (isWebView) {
-        setShowPopup(true);
-      } else if (isSystemBrowser) {
-        setShowPopup(false);
-      }
+      setShowPopup(isWebView());
     } else {
       setDeviceType("desktop");
       setShowPopup(false);
@@ -96,9 +113,7 @@ function Content() {
             <p className="text-sm md:text-base lg:text-xl">
               ระบบยืนยันตัวตนเพื่อเชื่อมต่ออินเทอร์เน็ตผ่าน Application ThaID
             </p>
-            <p>Your device type is: {deviceType}</p>
-            <p>Your Os type is: {os}</p>
-
+            <input type="text" value={`https://mfuthd.mfu.ac.th?mac=${macAddress}`} name="" id="" readOnly />
             <a href="/login">
               <div className="p-3 mt-4 mx-4 mb-10 md:mx-6 lg:mx-8 bg-black text-white text-center rounded-lg">
                 <p className="text-sm md:text-base lg:text-xl">เข้าสู่ระบบ</p>
@@ -118,7 +133,7 @@ function Content() {
             </p>
             {/* ================= start check and change messages according to Os system */}
             <div className="text-center list-disc list-inside mb-4">
-              {os === "iOS" ? (
+              {os === "iOS" || os === "macOs" ? (
                 <li>คลิกปุ่มด้านล่างเพื่อเปิดใน Safari.</li>
               ) : os === "Android" ? (
                 <li>สำหรับ Android: คลิกปุ่มด้านล่างเพื่อเปิดใน Chrome.</li>
@@ -130,9 +145,11 @@ function Content() {
 
             {/* ================= start check and change button messages according to Os system */}
             <div className="">
-              {os === "iOS" ? (
+              {os === "iOS" || os === "macOs" ? (
                 <a
-                  onClick={() => window.open(currentUrl, "_system")}
+                  onClick={() =>
+                    (window.location.href = `https://mfuthd.mfu.ac.th/mac=${macAddress}`)
+                  }
                   className="p-3 bg-black text-white rounded-lg cursor-pointer"
                 >
                   Open in Safari
